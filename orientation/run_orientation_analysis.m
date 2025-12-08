@@ -58,8 +58,6 @@ for p = 1:length(prefix)
             
             imfile = ROOTDIR + "/wave_" + prefix(p) + "/Well" + sprintf("%02d", w) + "/" + subpath("dic") + "/" + ...
                 prefix(p)+"_s"+sprintf("%02d", w)+"t"+sprintf("%02d",fr)+ch("dic")+"_ORG.tif";
-            imfile = ROOTDIR + "/wave_" + prefix(p) + "/Well" + sprintf("%01d", w) + "/" + subpath("dic") + "/" + ...
-                prefix(p)+"_s"+sprintf("%01d", w)+"t"+sprintf("%03d",fr)+ch("dic")+"_ORG.tif";
 
             im = imread(imfile);
             imsize = size(im);
