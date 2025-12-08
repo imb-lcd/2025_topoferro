@@ -351,10 +351,10 @@ function [low, high] = calculate_percent_localization(if_type, r, threshold)
         upr = threshold(2);
 
         % calculate percent in cytoplasm
-        low = numel( r(r>upr)) / ( numel(r)- numel(r(r>=lwr & r<=upr)) );
+        low = numel( r(r<lwr)) / ( numel(r)- numel(r(r>=lwr & r<=upr)) );
         
         % calculate percent in nucleus
-        high = numel( r(r<lwr)) / ( numel(r)- numel(r(r>=lwr & r<=upr)) );
+        high = numel( r(r>upr)) / ( numel(r)- numel(r(r>=lwr & r<=upr)) );
         disp(numel(r)- numel(r(r>=lwr & r<=upr)) + " " + numel( r(r>upr)) + " " + numel( r(r<lwr)));
         
     elseif strcmp(if_type, "NRF2")
