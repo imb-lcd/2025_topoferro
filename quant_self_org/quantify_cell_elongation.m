@@ -27,8 +27,6 @@ nframe = length(framelist);
 
 cell_shape = table;
 
-max_cells = 10000; % the highest number of cells being segmented 
-
 for fr = 1:nframe
     mask_file = path + "/" + prefix(1) + sprintf("%03d", framelist(fr)) + prefix(2) + "_cp_masks.png";
     mask = imread(mask_file);
@@ -40,8 +38,6 @@ for fr = 1:nframe
     stats.AxisRatio = stats.MajorAxisLength ./ stats.MinorAxisLength;
     stats.AspectRatio = stats.Area ./ stats.Perimeter;
     stats.Frame = repelem(framelist(fr), height(stats))';
-    
-    stats = stats(randperm(height(stats), max_cells), :);
 
     cell_shape = [cell_shape; stats];
 end
