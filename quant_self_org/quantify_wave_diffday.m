@@ -188,6 +188,7 @@ end
 
 
 %% calculate cirular dispersion
+% from the Circular Statistics Toolbox
 R = circ_r(theta); % calculate mean resultant length    
 circ_var = 1 - R;        
 
