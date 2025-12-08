@@ -15,13 +15,13 @@ warning('off', 'MATLAB:MKDIR:DirectoryExists');
 
 %% load segment and cy5 images
 
-all_prefix = ["seed05_day10_s24_diffday-1023-all", "seed10_day15_s02_diffday-1023-all" "mCh300FBS10-1" "wave_diffday-1118-1d"];
+all_prefix = ["seed05_day10_s24_diffday-1023-all", "seed10_day15_s02_diffday-1023-all" "mCh300FBS10-1"];
 well = [24 2 10 14];
-frames = [34 40 66 41 ];
+frames = [34 40 66 41];
 
 nframes = max(frames);
 
-th = [20000, 30000, 0, 3750];
+th = [20000, 30000, 0]; % third is processed separately
 
 num_death = nan(nframes, 4);
 pct_death = nan(nframes, 4);
@@ -33,19 +33,11 @@ for p = 1:length(all_prefix)
 % for p = 4
     prefix = all_prefix(p);
 
-    if p < 4
-        seg_file = ROOTDIR + "/movies_diff_day/" + ...
-            prefix + "_s" + sprintf("%02d", well(p)) + "tAllc2_ORG_stardist.tif";
-    
-        cy5_file = ROOTDIR + "/movies_diff_day/" + ...
-            prefix + "_s" + sprintf("%02d", well(p)) + "tAllc2_ORG.tif";
-    elseif p == 4
-        seg_file = "E:\wave_diffday-1118-1d\Well14\c1_mCherry_density\" + ...
-            "diffday-1118-1d_s14tAllc1_ORG_stardist.tif";
-    
-        cy5_file = "E:\wave_diffday-1118-1d\Well14\c2_cy5_adj\" + ...
-            "diffday-1118-1d_s14tAllc2_ORG_adj.tif";
-    end
+    seg_file = ROOTDIR + "/movies_diff_day/" + ...
+        prefix + "_s" + sprintf("%02d", well(p)) + "tAllc2_ORG_stardist.tif";
+
+    cy5_file = ROOTDIR + "/movies_diff_day/" + ...
+        prefix + "_s" + sprintf("%02d", well(p)) + "tAllc2_ORG.tif";
         
     % for i = 1:frames(p)
     for i = 1:frames(p)
@@ -80,7 +72,7 @@ for p = 1:length(all_prefix)
     end
 end
 
-%% for mCh300FBS10-1
+%% specific process for third wave mCh300FBS10-1
 
 t_start = 28;
 for p = 3
@@ -101,31 +93,12 @@ for p = 3
     for t = t_start+1:frames(p)
         seg = imread(seg_file, t);
 
-   
-        if t < 61
-            num_death(t, p) = max(seg(:)) - num_death_1;
-            num_cell(t, p) = max_cell + max_cell/3;
+        num_death(t, p) = max(seg(:)) - num_death_1;
+        num_cell(t, p) = max_cell + max_cell/3;
 
-            pct_death(t, p) = num_death(i)/ num_cell(t);
-        else 
-            num_death(t, p) = num_death(60, p);
-            num_cell(t, p) = max_cell+ max_cell/3;
-
-            pct_death(t, p) = num_death(t)/ num_cell(t);
-        end
+        pct_death(t, p) = num_death(i)/ num_cell(t);
         
     end 
-end
-
-%% add data up to time frame 66
-for p = 4 %[2 4]
-    for t = 1:nframes
-        if isnan(num_death(t, p))
-            num_death(t, p) = num_death(frames(p), p);
-            num_cell(t, p)  = num_cell(frames(p), p);
-            
-        end
-    end
 end
 
 %% test show figure
