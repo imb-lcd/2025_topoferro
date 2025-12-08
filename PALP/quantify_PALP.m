@@ -78,7 +78,6 @@ for ii = [fstart:fend]
     norm_red_im = red_im;
 
     for i = 1:height(induction_site)
-    % for i = 1
         center_x = induction_site.x(i);
         center_y = induction_site.y(i);
         [X, Y] = meshgrid(1:imsize(2), 1:imsize(1));
@@ -96,7 +95,6 @@ for ii = [fstart:fend]
 
     summary = [summary; induction_site];
 end
-% close all;
 
 %% quantify over time
 
@@ -110,8 +108,6 @@ summary = table;
 % for ii = [fstart:fend]
 for ii = [1:4 6:8]
     rep = sprintf('%02d', ii);
-    % rep = "";
-
 
     % obtain the coordinate of induction sites and create mask on the sites
     t = 1;
@@ -160,7 +156,6 @@ for ii = [1:4 6:8]
         norm_red_im = red_im;
     
         for i = 1:height(induction_site)
-        % for i = 1
             center_x = induction_site.x(i);
             center_y = induction_site.y(i);
             [X, Y] = meshgrid(1:imsize(2), 1:imsize(1));
@@ -194,10 +189,6 @@ end
 
 function I = min_max_normalization(I, Imin, Imax, a, b)
     I = (I - Imin) / (Imax - Imin) * (b-a) + a;
-end
-
-function quantile_normalization(images)
-    flattened_im = cellfun(@im)
 end
 
 function norm_I = percentile_normalization(I, lower_p, upper_p)
