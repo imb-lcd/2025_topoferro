@@ -1,9 +1,9 @@
 # Cellular self-organization orchestrates ferroptosis propagation
-Jen-Hao Cheng<sup>1,2†</sup>, Hannah K. C. Co<sup>1†</sup>, Hao-Kuen Lin<sup>1</sup>, Chia-Chou Wu<sup>1</sup>, and Sheng-hong Chen<sup>1,2*</sup>
-<sup>1</sup> Lab for Cell Dynamics, Institute of Molecular Biology, Academia Sinica, Taipei, Taiwan
-<sup>2</sup> Genome and Systems Biology Degree Program, Academia Sinica and National Taiwan University, Taipei, Taiwan
-<sup>†</sup> Equal contribution
-<sup>*</sup> Corresponding author
+Jen-Hao Cheng<sup>1,2†</sup>, Hannah K. C. Co<sup>1†</sup>, Hao-Kuen Lin<sup>1</sup>, Chia-Chou Wu<sup>1</sup>, and Sheng-hong Chen<sup>1,2*</sup><br>
+<sup>1</sup> Lab for Cell Dynamics, Institute of Molecular Biology, Academia Sinica, Taipei, Taiwan<br>
+<sup>2</sup> Genome and Systems Biology Degree Program, Academia Sinica and National Taiwan University, Taipei, Taiwan<br>
+<sup>†</sup> Equal contribution<br>
+<sup>*</sup> Corresponding author<br>
 
 ## Overview
 The customized scripts of the "Cellular self-organization orchestrates ferroptosis propagation", including image analysis, data analysis, scRNA-seq analysis, simulation, and plotting.
