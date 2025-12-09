@@ -218,7 +218,7 @@ cell_id = cell(cell_cnt, 1);
 cell_design = zeros(cell_cnt, 1);
 
 % set the thresholds for coherency
-coh_cut1 = 0.075; 
+coh_cut1 = 0.05; 
 coh_cut2 = 0.25;
 
 % loop through each cell and assign respective cell design to the position
