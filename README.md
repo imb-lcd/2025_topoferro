@@ -15,5 +15,6 @@ Versions of the programming languages are as follows: MATLAB (v. 2024b), ImageJ 
 | initiation | Image, statisical, and CNN analysis for initiation characterization |
 | orientation | Image and Q-tensor analysis for quantifying cell orientation and topological defects |
 | quant_self_org | Image and autocorrelation analysis for waves cultured for different durations of self-organization |
+| reaction_diffusion | Mathematicl modeling for reaction-diffusion model |
 | scRNA-seq | scRNA-seq analysis, including trajectory inference, RNA velocity, differentially expressed gene analysis, and regulon network |
 | wave_analysis | Image and data analysis for wave direction and speed |
