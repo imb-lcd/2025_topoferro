@@ -17,7 +17,7 @@ warning('off', 'MATLAB:MKDIR:DirectoryExists');
 %% CONFIGURATIONS
 ini_size = 150;
 
-pattern = ["phalf" "mhalf" "splay" "bend" "aligned"];
+pattern = ["phalf" "mhalf" "splay" "bend" "aligned" "misaligned"];
 
 bin_sz = 25;
 
@@ -41,6 +41,12 @@ mkdir(outpath);
 ini_file = "D:/Spatiotemporal_analysis/Initiation/" + all_prefix + "_initiation_details_pattern_per5_cov10_sp150.txt";
 ini = readtable(ini_file, 'Delimiter', '\t');
 
+% load initiations
+s_ini_file = "D:/Spatiotemporal_analysis/Initiation/spontaneous_initiation_details_pattern_per5_cov10_sp150.txt";
+s_ini = readtable(s_ini_file, 'Delimiter', '\t');
+
+ini = [ini; s_ini];
+
 % load random selected non-initiation background file
 bg_file = "D:/Spatiotemporal_analysis/Initiation/" + all_prefix + "_randbg" + bg_rep + "_details_pattern_per5_cov10_sp" + ini_size + ".txt";
 bg = readtable(bg_file, 'Delimiter', '\t');
@@ -55,6 +61,11 @@ res = readtable(res_file, 'Delimiter', '\t');
 % Control
 ctrl_ini_or = calculate_odds_ratio(pattern, ctrl_ini, ctrl_ini_n, ctrl_bg, ctrl_bg_n);
 ctrl_res_or = calculate_odds_ratio(pattern, ctrl_res, ctrl_res_n, ctrl_bg, ctrl_bg_n);
+
+%% calculate odds ratio maln
+% Control
+ctrl_ini_or = calculate_odds_ratio_maln(pattern, ctrl_ini, ctrl_ini_n, ctrl_bg, ctrl_bg_n);
+ctrl_res_or = calculate_odds_ratio_maln(pattern, ctrl_res, ctrl_res_n, ctrl_bg, ctrl_bg_n);
 
 %% calculate odds ratio spatial
 % Control
@@ -205,6 +216,36 @@ my_res_or = calculate_odds_ratio(pattern, my_res, my_res_n, my_bg, my_bg_n);
 gne_ini_or = calculate_odds_ratio(pattern, gne_ini, gne_ini_n, gne_bg, gne_bg_n);
 gne_res_or = calculate_odds_ratio(pattern, gne_res, gne_res_n, gne_bg, gne_bg_n);
 
+%% calculate odds ratio maln
+
+% Control
+ctrl_ini_or = calculate_odds_ratio_maln(pattern, ctrl_ini, ctrl_ini_n, ctrl_bg, ctrl_bg_n);
+ctrl_res_or = calculate_odds_ratio_maln(pattern, ctrl_res, ctrl_res_n, ctrl_bg, ctrl_bg_n);
+
+% Control 1
+ctrl1_ini_or = calculate_odds_ratio_maln(pattern, ctrl1_ini, ctrl1_ini_n, ctrl1_bg, ctrl1_bg_n);
+ctrl1_res_or = calculate_odds_ratio_maln(pattern, ctrl1_res, ctrl1_res_n, ctrl1_bg, ctrl1_bg_n);
+
+% TRULI
+truli_ini_or = calculate_odds_ratio_maln(pattern, truli_ini, truli_ini_n, truli_bg, truli_bg_n);
+truli_res_or = calculate_odds_ratio_maln(pattern, truli_res, truli_res_n, truli_bg, truli_bg_n);
+
+% KI696
+ki696_ini_or = calculate_odds_ratio_maln(pattern, ki696_ini, ki696_ini_n, ki696_bg, ki696_bg_n);
+ki696_res_or = calculate_odds_ratio_maln(pattern, ki696_res, ki696_res_n, ki696_bg, ki696_bg_n);
+
+% Control 2
+ctrl2_ini_or = calculate_odds_ratio_maln(pattern, ctrl2_ini, ctrl2_ini_n, ctrl2_bg, ctrl2_bg_n);
+ctrl2_res_or = calculate_odds_ratio_maln(pattern, ctrl2_res, ctrl2_res_n, ctrl2_bg, ctrl2_bg_n);
+
+% MY
+my_ini_or = calculate_odds_ratio_maln(pattern, my_ini, my_ini_n, my_bg, my_bg_n);
+my_res_or = calculate_odds_ratio_maln(pattern, my_res, my_res_n, my_bg, my_bg_n);
+
+% GNE
+gne_ini_or = calculate_odds_ratio_maln(pattern, gne_ini, gne_ini_n, gne_bg, gne_bg_n);
+gne_res_or = calculate_odds_ratio_maln(pattern, gne_res, gne_res_n, gne_bg, gne_bg_n);
+
 %% plot odds ratio and confience interval
 savefigure = 1;
 
@@ -234,7 +275,6 @@ for i = 1:length(or_list)
         ylim([0 3.5])
         xlim([0 6])
         xticks(x_range)
-    %     yticklabels(pattern(pttn))
         ylabel("Odds ratio of occurrence")
         hold off
     end
@@ -246,89 +286,15 @@ for i = 1:length(or_list)
     end
 end
 
-%% top pattern vs maln
-%
-%   process topological patterns vs densities and alignment
-%
-
-pttn_ini = ctrl_ini(ctrl_ini.phalf_150 > 0 | ctrl_ini.mhalf_150 > 0 | ctrl_ini.splay_150 > 0 | ctrl_ini.bend_150 > 0, :);
-pttn_bg  = ctrl_bg(ctrl_bg.phalf_150 > 0   | ctrl_bg.mhalf_150 > 0  | ctrl_bg.splay_150 > 0  | ctrl_bg.bend_150 > 0, :);
-pttn_res = ctrl_res(ctrl_res.phalf_150 > 0 | ctrl_res.mhalf_150 > 0 | ctrl_res.splay_150 > 0 | ctrl_res.bend_150 > 0, :);
-
-npttn_ini = ctrl_ini(ctrl_ini.pattern == 0 | ctrl_ini.pattern == 5, :);
-npttn_bg  = ctrl_bg(ctrl_bg.pattern == 0   | ctrl_bg.pattern == 5, :);
-npttn_res = ctrl_res(ctrl_res.pattern == 0 | ctrl_res.pattern == 5, :);
-
-% for initiation patterns
-sp_pttn_or  = calculate_odds_ratio_by_sp(pttn_ini,  ctrl_ini_n, pttn_bg,  ctrl_bg_n); % height(pttn_ini) height(pttn_bg)
-sp_npttn_or = calculate_odds_ratio_by_sp(npttn_ini, ctrl_ini_n, npttn_bg, ctrl_bg_n); % height(npttn_ini) height(npttn_bg)
-
-% for resistent patterns
-sp_pttn_r_or  = calculate_odds_ratio_by_sp(pttn_res,  ctrl_res_n, pttn_bg,  ctrl_bg_n); % height(pttn_res) height(pttn_bg)
-sp_npttn_r_or = calculate_odds_ratio_by_sp(npttn_res, ctrl_res_n, npttn_bg, ctrl_bg_n); % height(npttn_res) height(npttn_bg)
-
-%% plot for top pattern
-%
-%    plot odds ratio for topological patterns and without patterns
-%
-
-savefigure = 0;
-
-pttn_or = sp_pttn_r_or;
-npttn_or = sp_npttn_r_or;
-
-mycol1 = '#ED7D31'; % '#ED7D31'; % #000000
-mycol2 = '#843C0C'; % '#843C0C'; % '#595959'
-
-figure
-x_range = 1:length(pttn_or)
-x_range = x_range - 0.1;
-
-hold on
-errorbar(x_range, pttn_or(:,1), pttn_or(:,2), pttn_or(:,3), 'o', 'LineWidth', 1.5, 'Color', mycol1)
-plot(x_range, pttn_or(:,1), '.', 'MarkerSize', 30, 'LineWidth', 1, 'Color', mycol1)
-
-x_range = x_range + 0.2;
-errorbar(x_range, npttn_or(:,1), npttn_or(:,2), npttn_or(:,3), 'o', 'LineWidth', 1.5, 'Color', mycol2)
-plot(x_range, npttn_or(:,1), '.', 'MarkerSize', 30, 'LineWidth', 1, 'Color', mycol2)
-hold off
-
-yline(1, '--', 'Color', '#808080')
-ylim([0 3.5])
-xlim([1.5 length(pttn_or)+0.5])
-% xticks(x_range)
-ylabel("Odds ratio of occurrences")
-
-if savefigure
-    outname = "ctrl_pttn-npttn_odds_"+ini_size+"_photo_ini_bg"+bg_rep;
-    saveas(gcf, outpath+outname+".jpg", 'jpg')
-    saveas(gcf, outpath+outname+".svg", 'svg')
-end
-
 %% FUNCTIONS
 function or = calculate_odds_ratio_by_sp(ini, n_all, bg, bg_n_all)
     ini = ini(~isnan(ini.ent), :);
     bg = bg(~isnan(bg.ent), :);
 
-    % % 0 20 40 60 80 100
-    % d_thres = [7.0248   53.5752   63.7038   73.2201   85.7291  177.8219];
-    % e_thres = [1.1417   -1.2398   -1.6740   -2.0369   -2.4471   -4.9712];
-
     % % 0 25 50 75 100
-    % d_thres = [7.0248 56.3820 68.3350 81.9792 177.8219];
-    % e_thres = [1.1704 -1.3658 -1.8562 -2.3319 -4.9712];
-    d_thres = [7.0248 56.3820 81.9792 177.8219];
-    e_thres = [1.1704 -1.3658 -2.3319 -4.9712];
+    d_thres = [-Inf 56.3820 81.9792 Inf];
+    e_thres = [Inf -1.3658 -2.3319 -Inf];
     combinations = {'LL', 'LM', 'LH' 'ML', 'MM', 'MH', 'HL', 'HM', 'HH'};
-
-    % % 0 33 66 100
-    % e_thres = [1.1704 -1.5587 -2.1684 -4.9712];
-    % d_thres = [7.0248 60.3984 76.4317 177.8219];
-
-    % min mean max
-    % e_thres = [1.1704 -1.8294 -4.9712];
-    % d_thres = [7.0248 70.7203 177.8219];
-    % combinations = {'LL', 'LH', 'HL', 'HH'};
 
     len = length(d_thres)-1;
 
@@ -387,6 +353,53 @@ function or = calculate_odds_ratio_by_prop(prop, ini, n_all, bg, bg_n_all)
     end
 end
 
+function or = calculate_odds_ratio_maln(pattern, ini, n_all, bg, bg_n_all)
+    pttn_col = 8;
+
+    e_thres = -1.3658;
+
+    or = nan(length(pattern), 3);
+
+    for pttn = 1:length(pattern)-2
+        n_pttn    = numel(ini.ent( (ini.ent > e_thres) & contains(string(ini.pattern), string(pttn)) ));
+
+        bg_n_pttn = numel(bg.ent(  (bg.ent > e_thres) & contains(string(bg.pattern), string(pttn)) ));
+
+        fisher_data = [n_pttn bg_n_pttn; (n_all-n_pttn) (bg_n_all-bg_n_pttn)];
+        [hyp,pval,stats] = fishertest(fisher_data);
+
+        or(pttn, 1) = stats.OddsRatio;
+        or(pttn, 2) = stats.OddsRatio-stats.ConfidenceInterval(1);
+        or(pttn, 3) = stats.ConfidenceInterval(2)-stats.OddsRatio;
+        or(pttn, 4) = n_pttn;
+        or(pttn, 5) = bg_n_pttn;
+    end
+
+    n_prop    = numel(ini.ent( (ini.pattern == 5) ) );
+    bg_n_prop = numel(bg.ent(  (bg.pattern == 5)  ) );
+
+    fisher_data = [n_prop bg_n_prop; (n_all-n_prop) (bg_n_all-bg_n_prop)];
+    [hyp,pval,stats] = fishertest(fisher_data);
+
+    or(length(pattern)-1, 1) = stats.OddsRatio;
+    or(length(pattern)-1, 2) = stats.OddsRatio-stats.ConfidenceInterval(1);
+    or(length(pattern)-1, 3) = stats.ConfidenceInterval(2)-stats.OddsRatio;
+    or(length(pattern)-1, 4) = n_pttn;
+    or(length(pattern)-1, 5) = bg_n_pttn;
+
+    n_prop    = numel(ini.ent( (ini.ent > e_thres) & (ini.pattern == 0) ) );
+    bg_n_prop = numel(bg.ent(  (bg.ent > e_thres) & (bg.pattern == 0)   ) );
+
+    fisher_data = [n_prop bg_n_prop; (n_all-n_prop) (bg_n_all-bg_n_prop)];
+    [~,~,stats] = fishertest(fisher_data);
+
+    or(length(pattern), 1) = stats.OddsRatio;
+    or(length(pattern), 2) = stats.OddsRatio-stats.ConfidenceInterval(1);
+    or(length(pattern), 3) = stats.ConfidenceInterval(2)-stats.OddsRatio;
+    or(length(pattern), 4) = n_prop;
+    or(length(pattern), 5) = bg_n_prop;
+end
+
 function or =  calculate_odds_ratio(pattern, ini, n_all, bg, bg_n_all)
     pttn_col = 8;
 
@@ -431,25 +444,7 @@ function [p_ini, p_ini_n, p_bg, p_bg_n, p_res, p_res_n] = load_by_perturb(pertur
 end
 
 function [ini, n] = preprocess_ini_file(ini, prefix, imsize, sz)
-    % n = 0;
-    % offset = 51;
-    % for i = 1:height(ini)
-    %     p = find(prefix==ini.id(i));
-    % 
-    %     w = ini.well(i);
-    %     x = ceil(ini.x(i));
-    %     y = ceil(ini.y(i));
-    % 
-    %     imsz = imsize{p};
-    % 
-    %     if x-sz/2 < offset || y-sz/2 < offset || x+sz/2-1 > imsz(1)-offset || y+sz/2-1 > imsz(2)-offset || isnan(ini.ent(i))
-    %         % ini.ent(i) = NaN;
-    %         continue;
-    %     end
-    %     n = n + 1;
-    % end
-    % ini(isnan(ini.ent), :) = [];
-    
+   
     ini(isnan(ini.ent), :) = [];
     n = height(ini);
 
